@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <h:form>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#{request.contextPath}#{requestBean.home}" >#{msg.nome_aplicativo} - #{msg.titulo_padrao}</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+
+                <c:if test="#{userSession.usuarioPossuiEmpresa()}">
+                    <a href="#{empresaSelecionada.index()}">
+                        <i class="fa fa-building fa-fw"></i> #{empresaSelecionada.nomeEmpresaSelecionada}
+                    </a>
+                </c:if>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#{request.contextPath}#{requestBean.perfil}"><i class="fa fa-user fa-fw"></i> #{msg.menu_perfil}</a></li>
+                        <!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> #{msg.menu_configuracoes}</a></li>-->
+                        <li></li>
+                        <li class="divider"></li>
+                        <li>
+                            <h:commandLink class="fa fa-sign-out fa-fw" action="#{loginBean.logout}">
+                                <h:outputText value=" #{msg.menu_sair}" />
+                            </h:commandLink>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </h:form>
+    </h:body>
+</html>
+

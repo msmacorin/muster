@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:macor="http://xmlns.jcp.org/jsf/composite/tags"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <macor:header pageHeader="#{msg.perfil_header}" />
+
+                <h:form id="formCrud" styleClass="form-crud">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="#{msg.usuario_login}" for="txtLogin" />
+                        <p:inputText id="txtLogin"
+                                     disabled="true"
+                                     value="#{perfilUsuarioBean.value.login}"
+                                     required="true"
+                                     requiredMessage="#{msg.usuario_login_requerido}" />
+
+                        <p:outputLabel value="#{msg.usuario_nome}" for="txtNome"  />
+                        <p:inputText id="txtNome"
+                                     value="#{perfilUsuarioBean.value.nome}" 
+                                     required="true"
+                                     requiredMessage="#{msg.usuario_nome_requerido}"/>
+
+                        <p:outputLabel value="#{msg.usuario_email}" for="txtEmail" />
+                        <p:inputText id="txtEmail"
+                                     value="#{perfilUsuarioBean.value.email}"
+                                     required="true"
+                                     requiredMessage="#{msg.usuario_email_requerido}" />
+                    </h:panelGrid>
+
+                    <p:messages autoUpdate="true" />
+                    <p:separator />
+
+                    <p:commandButton icon="ui-icon-disk"
+                                     value="#{msg.botao_salvar}" 
+                                     action="#{perfilUsuarioBean.save()}"
+                                     oncomplete="PF('dialogCrud').hide();"/>
+
+                    <p:commandButton value="#{msg.usuario_botao_alterarSenha}"
+                                     icon="ui-icon-key" 
+                                     update=":formUpdatePass:updatePass"
+                                     oncomplete="PF('dialogUpdatePass').show()">
+                    </p:commandButton>
+                </h:form>
+
+                <h:form id="formUpdatePass" styleClass="form-crud">
+                    <p:dialog id="updatePass" 
+                              header="#{msg.menu_cadastro_usuario}"
+                              widgetVar="dialogUpdatePass"
+                              resizable="false"
+                              modal="true">
+
+                        <p:tabView>
+                            <p:tab title="#{msg.tab_dados}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel for="txtSenha" value="#{msg.usuario_nova_senha}" />
+                                    <p:password id="txtSenha"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_senha_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                match="txtConfirmacao"
+                                                value="#{perfilUsuarioBean.value.senha}" />
+
+                                    <p:outputLabel for="txtConfirmacao" value="#{msg.usuario_confirmar_senha}" />
+                                    <p:password id="txtConfirmacao"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_confirmar_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                value="#{perfilUsuarioBean.value.senha}" />
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{perfilUsuarioBean.alterarSenha()}"
+                                         oncomplete="PF('dialogUpdatePass').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogUpdatePass').hide();"/>
+                    </p:dialog>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+
+</html>
+

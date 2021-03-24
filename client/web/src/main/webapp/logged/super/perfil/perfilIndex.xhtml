@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:macor="http://java.sun.com/jsf/composite/tags"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <macor:header pageHeader="#{msg.menu_cadastro_perfil}" />
+
+                <h:form id="formTable">
+                    <p:dataTable id="tableCrud" 
+                                 var="val" 
+                                 value="#{perfilBean.values}">
+
+                        <f:facet name="header">#{msg.cadastro_perfil_index}</f:facet>
+
+                        <p:columns value="#{perfilBean.columnModel}" 
+                                   var="column" 
+                                   columnIndexVar="columnIndex" 
+                                   sortBy="#{val[column.property]}" 
+                                   filterBy="#{val[column.property]}">
+                            <f:facet name="header">
+                                <h:outputText value="#{column.header}" />
+                            </f:facet>
+                            <h:outputText value="#{val[column.property]}" />
+                        </p:columns>
+                        <p:column headerText="#{msg.tabela_acoes}" style="width: 100px">
+                            <p:commandButton icon="ui-icon-pencil" 
+                                             update=":formCrud:crud"
+                                             oncomplete="PF('dialogCrud').show()">
+                                <f:setPropertyActionListener target="#{perfilBean.value}"
+                                                             value="#{val}" />                                                 
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             onclick="PF('confirmation').show()">
+                                <f:setPropertyActionListener target="#{perfilBean.value}"
+                                                             value="#{val}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:messages autoUpdate="true" closable="true" />
+                    <p:separator />
+
+                    <p:commandButton value="#{msg.botao_adicionar}"
+                                     icon="ui-icon-plus"
+                                     update=":formCrud:crud"
+                                     actionListener="#{perfilBean.prepareInsert}"
+                                     oncomplete="PF('dialogCrud').show()" />
+                </h:form>
+
+                <h:form id="formCrud" styleClass="form-crud">
+                    <p:dialog id="crud" 
+                              header="#{msg.menu_cadastro_perfil}"
+                              widgetVar="dialogCrud"
+                              resizable="false"
+                              modal="true">
+
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="#{msg.perfil_nome}" for="txtNome" />
+                            <p:inputText id="txtNome"
+                                         value="#{perfilBean.value.nome}" 
+                                         required="true"
+                                         requiredMessage="#{msg.perfil_nome_requerido}" />
+
+                            <p:outputLabel value="#{msg.perfil_tipo_perfil}" for="cmbTipo" />
+                            <p:selectOneMenu id="cmbTipo"
+                                             value="#{perfilBean.value.tipoPerfil}">
+                                <f:selectItem itemLabel="#{msg.selecione}" itemValue="" />
+                                <f:selectItems value="#{perfilBean.tiposPerfil}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{perfilBean.save()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogCrud').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogCrud').hide();"/>
+
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="formRemove">
+                    <p:confirmDialog id="remove" 
+                                     header="#{msg.exclusao_titulo}" 
+                                     message="#{msg.exclusao_mensagem_confirmar}" 
+                                     severity="alert"
+                                     widgetVar="confirmation">
+
+                        <p:commandButton value="#{msg.botao_sim}"
+                                         action="#{perfilBean.delete()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="PF('confirmation').hide()"
+                                         icon="ui-icon-check" />
+                        <p:commandButton value="#{msg.botao_nao}" 
+                                         type="button" 
+                                         onclick="PF('confirmation').hide()"
+                                         styleClass="ui-confirmdialog-no" 
+                                         icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+</html>
+

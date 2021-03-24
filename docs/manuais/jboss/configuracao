@@ -1,0 +1,6 @@
+1 - Criando usuario no wildfly:
+ - na pasta bin entre com ./add-user.sh
+ - escolha Management User
+ - por padrão o usuario é macorTecnologia
+ - a senha é padrao + bco
+ 

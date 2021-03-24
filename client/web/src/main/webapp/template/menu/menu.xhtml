@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <c:if test="#{userSession.superUsuario() || userSession.adminUsuario()}">
+                    <li>
+                        <a href="#"><i class="fa fa-file-archive-o fa-fw"></i>   #{msg.menu_cadastro}<span class="fa arrow"></span></a>
+                        <!--<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>   <h:outputText value="#{msg.menu_cadastro}" /><span class="fa arrow"></span></a>-->
+                        <ul class="nav nav-second-level">
+                            <c:if test="#{userSession.superUsuario()}">
+                                <li><a href="#{request.contextPath}#{requestBean.empresaIndex}"> #{msg.menu_cadastro_empresa}</a></li>
+                                <li><a href="#{request.contextPath}#{requestBean.licencaIndex}"> #{msg.menu_cadastro_licenca}</a></li>
+                                <li><a href="#{request.contextPath}#{requestBean.perfilIndex}"> #{msg.menu_cadastro_perfil}</a></li>
+                            </c:if>
+
+                            <c:if test="#{userSession.adminUsuario()}">
+                                <li><a href="#{request.contextPath}#{requestBean.usuarioIndex}"> #{msg.menu_cadastro_usuario}</a></li>
+                            </c:if>
+                        </ul>
+                    </li>
+                </c:if>
+                <li>
+                    <a href="#"><i class="fa fa-table fa-fw"></i>   #{msg.menu_consulta}<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="#{request.contextPath}#{requestBean.tablespaceTableIndex}"> #{msg.servico_tablespace}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.processoTableIndex}"> #{msg.servico_processo}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.lockTableIndex}"> #{msg.servico_lock}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.hitRatioLibraryTableIndex}"> #{msg.servico_hit_ratio_library}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.hitRatioLatchTableIndex}"> #{msg.servico_hit_ratio_latch}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.hitRatioDictionaryCacheTableIndex}"> #{msg.servico_hit_ratio_dictionary_cache}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.hitRatioBufferCacheTableIndex}"> #{msg.servico_hit_ratio_buffer_cache}</a></li>
+                        <li><a href="#{request.contextPath}#{requestBean.flashRecoveryAreaTableIndex}"> #{msg.servico_flash_recovery_area}</a></li>
+                    </ul>
+                </li>
+<!--
+                <li>
+                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>   #{msg.menu_grafico}<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="#"> Teste</a></li>
+                    </ul>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+</html>
+

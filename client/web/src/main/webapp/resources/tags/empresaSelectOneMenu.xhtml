@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="componentId" required="true"></cc:attribute>
+        <cc:attribute name="value" required="true"></cc:attribute>
+        <cc:attribute name="requiredMessage" required="false"></cc:attribute>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:selectOneMenu id="#{cc.attrs.componentId}" 
+                         value="#{cc.attrs.value}" 
+                         converter="empresaConverter" 
+                         filter="true" filterMatchMode="startsWith">
+<!--                         requiredMessage="#{cc.attrs.requiredMessage ne null ? cc.attrs.requiredMessage : null}"
+                         required="#{cc.attrs.requiredMessage ne null ? 'true' : 'false'}"-->
+            <f:selectItem itemLabel="#{msg.selecione}" itemValue="" />
+            <f:selectItems value="#{empresaBean.values}" var="emp" itemLabel="#{emp.nome}" itemValue="#{emp}" />
+        </p:selectOneMenu>
+    </cc:implementation>
+
+</html>

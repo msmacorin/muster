@@ -1,0 +1,31 @@
+Licença
+Tabela que guarda a data de inicio de vigência do contrato da empresa no sistema, o prazo em meses de vigência do contrato e a hash de validação.
+A hash de validação deve ser criada com a classe PassGenerated chamando o método generated(LocalDate, int) passando como parâmetro a data gerada somando-se a data de inicio e os meses do prazo de vigência como baseDate e o numero 15 como size.
+Em todo login deve-se validar se a licença da empresa encontra-se expirada. No caso da licença expirada o login não é permitido.
+
+Para não deixarmos as empresas sem a utilização do sistema quando a licença expirar vamos implementar uma prorrogação do contrato em 1 mês. Para esta prorrogação a empresa tera que entrar em contato conosco e solicitar uma nova hash de validação. Neste processo iremos acrescentar 1 no prazo do contrato e substituir a hash existente no banco por uma nova, seguindo as regras da geração da hash.
+
+Obrigatoriamente esta licença deve ser vinculada a uma empresa e apenas o administrador do sistema pode ter acesso a tela do cadastro da licença.
+
+Tipos de permissão:
+- Permitido: Quando existe uma permissão deste tipo apenas os usuários vinculados aos perfis vinculados a permissão ou os usuários selecionados para esta permissão terão acesso a este modulo.
+- Bloqueado: Apenas os perfis ou usuários selecionados para este tipo de permissão serão bloqueados.
+
+Perfil de usuário.
+O perfil de usuário no sistema é criado para que um mesmo grupo de usuários tenham as mesmas permissões numa empresa dentro do sistema.
+
+Permissões por modulo.
+Temos no sistema a permissão por modulo. Nela indicamos qual o modulo a qual pertence esta permissão e indicamos se ela é do tipo (P) Permitido ou (B) Bloqueado.
+A regra de permissão por modulo pode ser quebrada se o perfil ou usuário estiverem vinculados a uma regra especifica de um programa deste modulo.
+
+Permissões por programa.
+Para se criar esta permissão, além dela própria é necessário ter cadastrado o programa a qual ela estará vinculada.
+Nela vincularemos o programa e indicaremos qual o tipo (P) Permitido ou (B) Bloqueado.
+A regra de permissões por programa pode quebrar a regra de permissões por modulo, basta um perfil ou usuário estarem vinculados a uma permissão por programa com o tipo contrario a permissão do modulo a qual este estava vinculado.
+
+Permissões por perfil.
+Quando uma permissão é vinculada a um perfil, automaticamente todos os usuários que estão vinculados a este perfil passam a ter acesso ou bloqueio ao modulo ou programa.
+A regra de permissão do perfil pode ser quebrada se um usuário especifico deste perfil estiver vinculado a uma regra de permissão por usuário ao modulo ou programa.
+
+Permissões por usuário.
+Quando a permissão é vinculada a um usuário especifico, se existir uma regra para o perfil deste usuário ela sera ignorada e valera apenas a por usuário.

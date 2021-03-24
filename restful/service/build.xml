@@ -1,0 +1,61 @@
+<project name="deploy restful server" basedir="." default="deploy-restful-with-dependencies">
+    <property name="ear-dir" value="../ear" />
+    <property name="model-dir" value="../../model" />
+    <property name="dao-dir" value="../../dao" />
+    <property name="facade-dir" value="../../facade" />
+    
+    <target name="undeploy">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:undeploy" />
+        </exec>
+    </target>
+
+    <!--simple-->
+    <target name="deploy-restful" depends="build-restful">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:deploy" />
+        </exec>
+    </target>
+
+    <target name="build-restful">
+        <exec dir="." executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+    
+    <!--with dependencies-->
+    <target name="deploy-restful-with-dependencies" depends="build-restful-with-dependencies">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:deploy" />
+        </exec>
+    </target>
+
+    <target name="build-restful-with-dependencies" depends="build-facade">
+        <exec dir="." executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-facade" depends="build-dao">
+        <exec dir="${facade-dir}" executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-dao" depends="build-model">
+        <exec dir="${dao-dir}" executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-model">
+        <exec dir="${model-dir}" executable="mvn">
+            <arg value="clean" />
+            <arg value="install" />
+        </exec>
+    </target>
+</project>

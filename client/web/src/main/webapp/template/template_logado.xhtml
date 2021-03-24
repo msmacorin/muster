@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="template_inicial.xhtml">
+        <ui:define name="doBody">
+            <div id="wrapper">
+                <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <ui:include src="template_logado_topo.xhtml" />
+                    <ui:include src="template_logado_lateral.xhtml" />
+                </nav>
+
+                <div id="page-wrapper">
+                    <ui:insert name="doPage"></ui:insert>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>
+

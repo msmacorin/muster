@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a href="#"><i class="fa fa-gears fa-fw"></i>   #{msg.menu_configuracoes}<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <c:if test="#{userSession.localUsuario()}">
+                            <li><a href="#{request.contextPath}#{requestBean.configuracaoLocalIndex}"> #{msg.menu_configuracao_local}</a></li>
+                            <li><a href="#{request.contextPath}#{requestBean.statusServicoIndex}"> #{msg.menu_status_servico}</a></li>
+                        </c:if>
+                        <c:if test="#{userSession.superUsuario()}">
+                            <li><a href="#{request.contextPath}#{requestBean.usuarioLocalIndex}"> #{msg.menu_cadastro_usuario}</a></li>
+                        </c:if>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</html>
+

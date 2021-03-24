@@ -1,0 +1,61 @@
+<project name="deploy local web" basedir="." default="deploy-web-with-dependencies">
+    <property name="ear-dir" value="../ear" />
+    <property name="model-dir" value="../../model" />
+    <property name="dao-dir" value="../../dao" />
+    <property name="facade-dir" value="../../facade" />
+    
+    <target name="undeploy">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:undeploy" />
+        </exec>
+    </target>
+
+    <!--simple-->
+    <target name="deploy-web" depends="build-web">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:deploy" />
+        </exec>
+    </target>
+
+    <target name="build-web">
+        <exec dir="." executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+    
+    <!--with dependencies-->
+    <target name="deploy-web-with-dependencies" depends="build-web-with-dependencies">
+        <exec dir="${ear-dir}" executable="mvn">
+            <arg value="wildfly:deploy" />
+        </exec>
+    </target>
+
+    <target name="build-web-with-dependencies" depends="build-facade">
+        <exec dir="." executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-facade" depends="build-dao">
+        <exec dir="${facade-dir}" executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-dao" depends="build-model">
+        <exec dir="${dao-dir}" executable="mvn">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-model">
+        <exec dir="${model-dir}" executable="mvn">
+            <arg value="clean" />
+            <arg value="install" />
+        </exec>
+    </target>
+</project>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:macor="http://java.sun.com/jsf/composite/tags"      
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <macor:header pageHeader="#{msg.selecionar_empresa_header}" />
+
+                <h:form id="formCrud" styleClass="form-crud">
+                    <h:panelGrid columns="2" id="pnlEmpresa">
+                        <p:outputLabel value="#{msg.empresa_cnpj}" for="txtCnpj" />
+                        <p:outputLabel id="txtCnpj" value="#{empresaSelecionada.value.cnpj}" />
+
+                        <p:outputLabel value="#{msg.empresa_nome}" for="txtEmpresa" />
+                        <p:outputLabel id="txtEmpresa" value="#{empresaSelecionada.value.nome}" />
+                    </h:panelGrid>
+
+                    <p:messages autoUpdate="true" />
+                    <p:separator />
+
+                    <p:commandButton icon="ui-icon-refresh"
+                                     value="#{msg.botao_selecionar_alterar}" 
+                                     update=":formSelect:select"
+                                     oncomplete="PF('dialogSelect').show();"/>
+                </h:form>
+
+                <!--selecionar a empresa -->
+                <h:form id="formSelect" styleClass="form-crud">
+                    <p:dialog id="select" 
+                              header="#{msg.menu_cadastro_usuario}"
+                              widgetVar="dialogSelect"
+                              resizable="false"
+                              modal="true">
+
+                        <p:tabView>
+                            <p:tab title="#{msg.tab_dados}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel for="cmbEmpresa" value="#{msg.menu_cadastro_empresa}" />
+                                    <p:selectOneMenu id="cmbEmpresa" 
+                                                     value="#{empresaSelecionada.value}"
+                                                     converter="empresaConverter"
+                                                     filter="true" filterMatchMode="startsWith">
+
+                                        <f:selectItem itemLabel="#{msg.selecione}" itemValue="" />
+                                        <f:selectItems value="#{empresaSelecionada.empresasUsuario}" 
+                                                       var="emp" 
+                                                       itemLabel="#{emp.nome}" 
+                                                       itemValue="#{emp}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{empresaSelecionada.gravarEmpresa()}"
+                                         update=":formCrud:pnlEmpresa"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogSelect').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogSelect').hide();"/>
+                    </p:dialog>
+                </h:form>
+
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+</html>
+

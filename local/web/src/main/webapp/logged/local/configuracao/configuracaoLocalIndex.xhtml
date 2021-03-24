@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:macor="http://xmlns.jcp.org/jsf/composite/tags"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <h:form id="formCrud" styleClass="form-crud">
+                    <macor:header pageHeader="#{msg.configuracao_local_header}" />
+
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="#{msg.menu_cadastro_empresa}" for="cmbEmpresa" />
+                        <p:selectOneMenu id="cmbEmpresa" 
+                                         value="#{configuracaoLocalBean.empresa}"
+                                         converter="empresaConverter"
+                                         valueChangeListener="#{configuracaoLocalBean.alterarEmpresa}"
+                                         onchange="submit()"
+                                         immediate="true"
+                                         filter="true" filterMatchMode="startsWith">
+                            
+                            <p:ajax event="change" update="cmbUsuario" />
+
+                            <f:selectItem itemLabel="#{msg.selecione}" itemValue="" />
+                            <f:selectItems value="#{configuracaoLocalBean.empresasLicenciadas}" 
+                                           var="emp" 
+                                           itemLabel="#{emp.nome}" 
+                                           itemValue="#{emp}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{msg.menu_cadastro_usuario}" for="cmbUsuario" />
+                        <p:selectOneMenu id="cmbUsuario"
+                                         disabled="#{configuracaoLocalBean.empresaNaoSelecionada}"
+                                         value="#{configuracaoLocalBean.usuario}"
+                                         converter="usuarioConverter"
+                                         filter="true" filterMatchMode="startsWith">
+                            <f:selectItem itemLabel="#{msg.selecione}" itemValue="" />
+                            <f:selectItems value="#{configuracaoLocalBean.usuariosVinculados}"
+                                           var="usu"
+                                           itemLabel="#{usu.usuarioFormatado}"
+                                           itemValue="#{usu}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{msg.config_url_api}" for="txtUrlApi" />
+                        <p:inputText id="txtUrlApi" value="#{configuracaoLocalBean.value.urlApi}" />
+
+                        <p:outputLabel value="#{msg.config_email_avisos}" for="txtEmailAvisos" />
+                        <p:inputText id="txtEmailAvisos" value="#{configuracaoLocalBean.value.email}" />
+                    </h:panelGrid>
+
+                    <p:messages autoUpdate="true" closable="true" />
+                    <p:separator />
+
+                    <p:commandButton icon="ui-icon-disk"
+                                     value="#{msg.botao_salvar}" 
+                                     action="#{configuracaoLocalBean.save()}" />
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+
+</html>
+

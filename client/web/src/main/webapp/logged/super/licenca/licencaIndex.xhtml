@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:macor="http://java.sun.com/jsf/composite/tags"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <macor:header pageHeader="#{msg.menu_cadastro_licenca}" />
+
+                <h:form id="formTable">
+                    <p:dataTable id="tableCrud" 
+                                 style="margin-top: 25px"
+                                 var="val" 
+                                 value="#{licencaBean.values}">
+
+                        <f:facet name="header">#{msg.cadastro_licenca_index}</f:facet>
+                        <p:column  headerText="#{msg.licenca_empresa}"
+                                   sortBy="#{val.empresa.nome}"
+                                   filterBy="#{val.empresa.nome}"
+                                   filterMatchMode="contains">
+                            <h:outputLabel value="#{val.empresa.nome}" />
+                        </p:column>
+                        
+                        <p:column  headerText="#{msg.licenca_inicio}"
+                                   sortBy="#{val.inicio}"
+                                   filterBy="#{val.inicio}"
+                                   filterMatchMode="contains">
+                            <h:outputLabel value="#{val.inicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputLabel>
+                        </p:column>
+                        
+                        <p:column  headerText="#{msg.licenca_prazo}"
+                                   sortBy="#{val.prazo}"
+                                   filterBy="#{val.prazo}"
+                                   filterMatchMode="contains">
+                            <h:outputLabel value="#{val.prazo}" />
+                        </p:column>
+                        
+                        <p:column headerText="#{msg.tabela_acoes}" style="width: 100px">
+                            <p:commandButton icon="ui-icon-pencil" 
+                                             update=":formCrud:crud"
+                                             oncomplete="PF('dialogCrud').show()">
+                                <f:setPropertyActionListener target="#{licencaBean.value}"
+                                                             value="#{val}" />                                                 
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             onclick="PF('confirmation').show()">
+                                <f:setPropertyActionListener target="#{licencaBean.value}"
+                                                             value="#{val}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:messages autoUpdate="true" closable="true" />
+                    <p:separator />
+
+                    <p:commandButton value="#{msg.botao_adicionar}"
+                                     icon="ui-icon-plus"
+                                     update=":formCrud:crud"
+                                     actionListener="#{licencaBean.prepareInsert}"
+                                     oncomplete="PF('dialogCrud').show()" />
+                </h:form>
+
+                <h:form id="formCrud" styleClass="form-crud">
+                    <p:dialog id="crud" 
+                              header="#{msg.menu_cadastro_licenca}"
+                              widgetVar="dialogCrud"
+                              resizable="false"
+                              modal="true">
+
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="#{msg.licenca_inicio}" for="txtInicio"  />
+                            <p:calendar id="txtInicio"
+                                        locale="pt_BR"
+                                        pattern="dd/MM/yyyy"
+                                        showOn="button"
+                                        value="#{licencaBean.value.inicio}" 
+                                        required="true"
+                                        requiredMessage="#{msg.licenca_inicio_requerido}"/>
+
+                            <p:outputLabel value="#{msg.licenca_prazo}" for="txtPrazo" />
+                            <p:spinner  id="txtPrazo"
+                                        min="0"
+                                        max="24"
+                                        value="#{licencaBean.value.prazo}"
+                                        required="true"
+                                        requiredMessage="#{msg.licenca_prazo_requerido}" />
+
+                            <p:outputLabel value="#{msg.licenca_empresa}" for=":formCrud:somEmpresa:cmbEmpresa"/>
+                            <macor:empresaSelectOneMenu id="somEmpresa"
+                                                        componentId="cmbEmpresa"
+                                                        value="#{licencaBean.value.empresa}"
+                                                        requiredMessage="#{msg.licenca_empresa_requerido}"/>
+
+                        </h:panelGrid>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{licencaBean.save()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogCrud').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogCrud').hide();"/>
+
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="formRemove">
+                    <p:confirmDialog id="remove" 
+                                     header="#{msg.exclusao_titulo}" 
+                                     message="#{msg.exclusao_mensagem_confirmar}" 
+                                     severity="alert"
+                                     widgetVar="confirmation">
+
+                        <p:commandButton value="#{msg.botao_sim}"
+                                         action="#{licencaBean.delete()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="PF('confirmation').hide()"
+                                         icon="ui-icon-check" />
+                        <p:commandButton value="#{msg.botao_nao}" 
+                                         type="button" 
+                                         onclick="PF('confirmation').hide()"
+                                         styleClass="ui-confirmdialog-no" 
+                                         icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+</html>

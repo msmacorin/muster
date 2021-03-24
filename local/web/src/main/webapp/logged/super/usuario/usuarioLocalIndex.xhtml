@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:macor="http://xmlns.jcp.org/jsf/composite/tags"      
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <h:form id="formCrud" styleClass="form-crud">
+                    <macor:header pageHeader="#{msg.usuario_local_header}" />
+
+                    <h:panelGrid columns="2" id="gridUsuario">
+                        <h:outputLabel value="#{msg.usuario_nome}" />
+                        <h:outputLabel value="#{usuarioLocalBean.value.nome}" />
+
+                        <h:outputLabel value="#{msg.usuario_login}" />
+                        <h:outputLabel value="#{usuarioLocalBean.value.login}" />
+                    </h:panelGrid>
+
+                    <p:messages autoUpdate="true" closable="true" />
+                    <p:separator />
+
+                    <h:panelGrid columns="2">
+                        <p:commandButton icon="ui-icon-arrowthickstop-1-s"
+                                         value="#{msg.botao_buscar_usuario}"
+                                         update="gridUsuario"
+                                         action="#{usuarioLocalBean.buscarUsuarioLocal()}"/>
+                        
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{usuarioLocalBean.save()}" />
+                    </h:panelGrid>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+
+</html>
+

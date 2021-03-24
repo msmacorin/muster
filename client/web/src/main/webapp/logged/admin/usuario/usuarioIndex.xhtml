@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:macor="http://java.sun.com/jsf/composite/tags"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template/template_logado.xhtml">
+        <ui:define name="doPage">
+            <h:body>
+                <macor:header pageHeader="#{msg.menu_cadastro_usuario}" />
+
+                <h:form id="formTable">
+                    <p:dataTable id="tableCrud" 
+                                 var="val" 
+                                 value="#{usuarioBean.values}">
+
+                        <f:facet name="header">#{msg.cadastro_usuario_index}</f:facet>
+
+                        <p:columns value="#{usuarioBean.columnModel}" 
+                                   var="column" 
+                                   columnIndexVar="columnIndex" 
+                                   sortBy="#{val[column.property]}" 
+                                   filterBy="#{val[column.property]}">
+                            <f:facet name="header">
+                                <h:outputText value="#{column.header}" />
+                            </f:facet>
+                            <h:outputText value="#{val[column.property]}" />
+                        </p:columns>
+                        <p:column headerText="#{msg.tabela_acoes}" style="width: 140px">
+                            <p:commandButton icon="ui-icon-pencil" 
+                                             update=":formUpdate:update"
+                                             oncomplete="PF('dialogUpdate').show()">
+                                <f:setPropertyActionListener target="#{usuarioBean.value}"
+                                                             value="#{val}" />                                                 
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             onclick="PF('confirmation').show()">
+                                <f:setPropertyActionListener target="#{usuarioBean.value}"
+                                                             value="#{val}" />
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-key" 
+                                             update=":formUpdatePass:updatePass"
+                                             oncomplete="PF('dialogUpdatePass').show()">
+                                <f:setPropertyActionListener target="#{usuarioBean.value}"
+                                                             value="#{val}" />                                                 
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:messages autoUpdate="true" closable="true" />
+                    <p:separator />
+
+                    <p:commandButton value="#{msg.botao_adicionar}"
+                                     icon="ui-icon-plus"
+                                     update=":formCrud:crud"
+                                     actionListener="#{usuarioBean.prepareInsert}"
+                                     oncomplete="PF('dialogCrud').show()" />
+                </h:form>
+
+                <!--alterar a senha do usuario-->
+                <h:form id="formUpdatePass" styleClass="form-crud">
+                    <p:dialog id="updatePass" 
+                              header="#{msg.menu_cadastro_usuario}"
+                              widgetVar="dialogUpdatePass"
+                              resizable="false"
+                              modal="true">
+
+                        <p:tabView>
+                            <p:tab title="#{msg.tab_dados}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel for="txtSenha" value="#{msg.usuario_nova_senha}" />
+                                    <p:password id="txtSenha"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_senha_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                match="txtConfirmacao"
+                                                value="#{usuarioBean.value.senha}" />
+
+                                    <p:outputLabel for="txtConfirmacao" value="#{msg.usuario_confirmar_senha}" />
+                                    <p:password id="txtConfirmacao"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_confirmar_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                value="#{usuarioBean.value.senha}" />
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{usuarioBean.alterarSenha()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogUpdatePass').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogUpdatePass').hide();"/>
+                    </p:dialog>
+                </h:form>
+                
+                <!--crud do usuario-->
+                <h:form id="formCrud" styleClass="form-crud">
+                    <p:dialog id="crud" 
+                              header="#{msg.menu_cadastro_usuario}"
+                              widgetVar="dialogCrud"
+                              resizable="false"
+                              modal="true">
+
+                        <p:tabView>
+                            <p:tab title="#{msg.tab_dados}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="#{msg.usuario_nome}" for="txtNome"  />
+                                    <p:inputText id="txtNome"
+                                                 value="#{usuarioBean.value.nome}" 
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_nome_requerido}"/>
+
+                                    <p:outputLabel value="#{msg.usuario_email}" for="txtEmail" />
+                                    <p:inputText id="txtEmail"
+                                                 value="#{usuarioBean.value.email}"
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_email_requerido}" />
+
+                                    <p:outputLabel value="#{msg.usuario_login}" for="txtLogin" />
+                                    <p:inputText id="txtLogin"
+                                                 value="#{usuarioBean.value.login}"
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_login_requerido}" />
+
+                                    <p:outputLabel for="txtSenha" value="#{msg.usuario_senha}" />
+                                    <p:password id="txtSenha"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_senha_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                match="txtConfirmacao"
+                                                value="#{usuarioBean.value.senha}" />
+
+                                    <p:outputLabel for="txtConfirmacao" value="#{msg.usuario_confirmar_senha}" />
+                                    <p:password id="txtConfirmacao"
+                                                required="true"
+                                                requiredMessage="#{msg.usuario_confirmar_requerido}"
+                                                validatorMessage="#{msg.usuario_confirmar_invalido}"
+                                                feedback="false"
+                                                value="#{usuarioBean.value.senha}" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{msg.tab_dados_empresas}">
+                                <p:pickList value="#{usuarioBean.empresas}" 
+                                            var="empresa" required="true"
+                                            converter="empresaConverter"
+                                            itemLabel="#{empresa}" 
+                                            itemValue="#{empresa}">
+                                    <f:facet name="sourceCaption">#{msg.tab_disponivel}</f:facet>
+                                    <f:facet name="targetCaption">#{msg.tab_selecionado}</f:facet>
+                                    
+                                    <p:column>
+                                        <h:outputText value="#{empresa.nome}" />
+                                    </p:column>
+                                </p:pickList>
+                            </p:tab>
+                            <p:tab title="#{msg.tab_dados_perfis}">
+                                <p:pickList value="#{usuarioBean.perfis}" 
+                                            var="perfil" required="true"
+                                            converter="perfilConverter"
+                                            itemLabel="#{perfil}" 
+                                            itemValue="#{perfil}">
+                                    <f:facet name="sourceCaption">#{msg.tab_disponivel}</f:facet>
+                                    <f:facet name="targetCaption">#{msg.tab_selecionado}</f:facet>
+                                    
+                                    <p:column>
+                                        <h:outputText value="#{perfil.nome}" />
+                                    </p:column>
+                                </p:pickList>
+                            </p:tab>
+                        </p:tabView>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{usuarioBean.save()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogCrud').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogCrud').hide();"/>
+                    </p:dialog>
+                </h:form>
+                
+                <!--update do usuario-->
+                <h:form id="formUpdate" styleClass="form-crud">
+                    <p:dialog id="update" 
+                              header="#{msg.menu_cadastro_usuario}"
+                              widgetVar="dialogUpdate"
+                              resizable="false"
+                              modal="true">
+
+                        <p:tabView>
+                            <p:tab title="#{msg.tab_dados}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="#{msg.usuario_nome}" for="txtNome"  />
+                                    <p:inputText id="txtNome"
+                                                 value="#{usuarioBean.value.nome}" 
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_nome_requerido}"/>
+
+                                    <p:outputLabel value="#{msg.usuario_email}" for="txtEmail" />
+                                    <p:inputText id="txtEmail"
+                                                 value="#{usuarioBean.value.email}"
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_email_requerido}" />
+
+                                    <p:outputLabel value="#{msg.usuario_login}" for="txtLogin" />
+                                    <p:inputText id="txtLogin"
+                                                 value="#{usuarioBean.value.login}"
+                                                 required="true"
+                                                 requiredMessage="#{msg.usuario_login_requerido}" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{msg.tab_dados_empresas}">
+                                <p:pickList value="#{usuarioBean.empresas}" 
+                                            var="empresa" required="true"
+                                            converter="empresaConverter"
+                                            itemLabel="#{empresa}" 
+                                            itemValue="#{empresa}">
+                                    <f:facet name="sourceCaption">#{msg.tab_disponivel}</f:facet>
+                                    <f:facet name="targetCaption">#{msg.tab_selecionado}</f:facet>
+                                    
+                                    <p:column>
+                                        <h:outputText value="#{empresa.nome}" />
+                                    </p:column>
+                                </p:pickList>
+                            </p:tab>
+                            <p:tab title="#{msg.tab_dados_perfis}">
+                                <p:pickList value="#{usuarioBean.perfis}" 
+                                            var="perfil" required="true"
+                                            converter="perfilConverter"
+                                            itemLabel="#{perfil}" 
+                                            itemValue="#{perfil}">
+                                    <f:facet name="sourceCaption">#{msg.tab_disponivel}</f:facet>
+                                    <f:facet name="targetCaption">#{msg.tab_selecionado}</f:facet>
+                                    
+                                    <p:column>
+                                        <h:outputText value="#{perfil.nome}" />
+                                    </p:column>
+                                </p:pickList>
+                            </p:tab>
+                        </p:tabView>
+
+                        <p:messages autoUpdate="true" />
+                        <p:separator />
+
+                        <p:commandButton icon="ui-icon-disk"
+                                         value="#{msg.botao_salvar}" 
+                                         action="#{usuarioBean.save()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="if (#{not facesContext.validationFailed}) PF('dialogUpdate').hide();"/>
+
+                        <p:button icon="ui-icon-arrowreturnthick-1-w" 
+                                  value="#{msg.botao_cancelar}"
+                                  onclick="PF('dialogUpdate').hide();"/>
+                    </p:dialog>
+                </h:form>
+
+                <!--confirmacao de remocao do registro de usuario-->
+                <h:form id="formRemove">
+                    <p:confirmDialog id="remove" 
+                                     header="#{msg.exclusao_titulo}" 
+                                     message="#{msg.exclusao_mensagem_confirmar}" 
+                                     severity="alert"
+                                     widgetVar="confirmation">
+
+                        <p:commandButton value="#{msg.botao_sim}"
+                                         action="#{usuarioBean.delete()}"
+                                         update=":formTable:tableCrud"
+                                         oncomplete="PF('confirmation').hide()"
+                                         icon="ui-icon-check" />
+                        <p:commandButton value="#{msg.botao_nao}" 
+                                         type="button" 
+                                         onclick="PF('confirmation').hide()"
+                                         styleClass="ui-confirmdialog-no" 
+                                         icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:decorate>
+</html>

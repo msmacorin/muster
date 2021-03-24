@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+<!--    <persistence-unit name="musterPU" transaction-type="JTA">
+        <jta-data-source>java:/MusterDS</jta-data-source>
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
+            <property name="hibernate.jdbc.wrap_result_sets" value="false"/>
+            <property name="hibernate.hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>br.com.muster.model.admin.Empresa</class>
+        <class>br.com.muster.model.admin.Licenca</class>
+        <class>br.com.muster.model.admin.Perfil</class>
+        <class>br.com.muster.model.admin.Usuario</class>
+        <class>br.com.muster.model.pessoa.Cep</class>
+        <class>br.com.muster.model.pessoa.Endereco</class>
+        <class>br.com.muster.model.pessoa.Estado</class>
+        <class>br.com.muster.model.pessoa.Localidade</class>
+        <class>br.com.muster.model.pessoa.Pais</class>
+        <class>br.com.muster.model.pessoa.Pessoa</class>
+    </persistence-unit>-->
+  
+    <persistence-unit name="oraclePU" transaction-type="RESOURCE_LOCAL">
+        <jta-data-source>java:/OracleDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect" />  
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
+            <property name="hibernate.jdbc.wrap_result_sets" value="false"/>
+            <property name="hibernate.hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    </persistence-unit>
+</persistence>
